@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.IeAccountDao" >
+  <resultMap id="BaseResultMap" type="com.entity.IeAccount" >
+    <id column="id" property="id"   />
+ <result column="ieDate" property="ieDate" />
+ <result column="ieType" property="ieType" />
+ <result column="amount" property="amount" />
+ <result column="note" property="note" />
+ <result column="operator" property="operator" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from ieAccount     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from ieAccount where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.IeAccount" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into ieAccount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ieDate != null" >ieDate,</if>
+      <if test="ieType != null" >ieType,</if>
+      <if test="amount != null" >amount,</if>
+      <if test="note != null" >note,</if>
+      <if test="operator != null" >operator,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ieDate != null" >   #{ieDate},  </if>
+      <if test="ieType != null" >   #{ieType},  </if>
+      <if test="amount != null" >   #{amount},  </if>
+      <if test="note != null" >   #{note},  </if>
+      <if test="operator != null" >   #{operator},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.IeAccount" >
+    update ieAccount
+     <set >
+      <if test="ieDate != null" >ieDate=#{ieDate}, </if>
+      <if test="ieType != null" >ieType=#{ieType}, </if>
+      <if test="amount != null" >amount=#{amount}, </if>
+      <if test="note != null" >note=#{note}, </if>
+      <if test="operator != null" >operator=#{operator}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  ieAccount   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       ieAccount
+  </select>
+  <select id="searlist"  parameterType="com.entity.IeAccount"  resultMap="BaseResultMap">
+      select * from  ieAccount   where 1=1 ${Where} order by id desc
+  </select>
+</mapper>
+

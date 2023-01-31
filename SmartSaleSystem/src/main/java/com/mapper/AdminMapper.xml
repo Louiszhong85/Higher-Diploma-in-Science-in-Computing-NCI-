@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.AdminDao" >
+  <resultMap id="BaseResultMap" type="com.entity.Admin" >
+    <id column="id" property="id"   />
+ <result column="username" property="username" />
+ <result column="pwd" property="pwd" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from admin     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from admin where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Admin" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >username,</if>
+      <if test="pwd != null" >pwd,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >   #{username},  </if>
+      <if test="pwd != null" >   #{pwd},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.Admin" >
+    update admin
+     <set >
+      <if test="username != null" >username=#{username}, </if>
+      <if test="pwd != null" >pwd=#{pwd}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  admin   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       admin
+  </select>
+  <select id="searlist"  parameterType="com.entity.Admin"  resultMap="BaseResultMap">
+      select * from  admin   where 1=1 ${Where} order by id desc
+  </select>
+  <select id="userlogin" resultMap="BaseResultMap"   >
+   select * from admin      where  username = #{username} and pwd = #{pwd} 
+  </select>
+  <update id="pwd" parameterType="com.entity.Admin" >
+   update admin   set   pwd = #{pwd}     where username = #{username}
+  </update>
+  
+
+</mapper>
+

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.ProductDao" >
+  <resultMap id="BaseResultMap" type="com.entity.Product" >
+    <id column="id" property="id"   />
+ <result column="itemID" property="itemID" />
+ <result column="itemName" property="itemName" />
+ <result column="typeName" property="typeName" />
+ <result column="price" property="price" />
+ <result column="manuName" property="manuName" />
+ <result column="barCode" property="barCode" />
+ <result column="sku" property="sku" />
+ <result column="description" property="description" />
+ <result column="note" property="note" />
+ <result column="quantity" property="quantity" />
+ <result column="pic" property="pic" />
+ <result column="stockArea" property="stockArea" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from product     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from product where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Product" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemID != null" >itemID,</if>
+      <if test="itemName != null" >itemName,</if>
+      <if test="typeName != null" >typeName,</if>
+      <if test="price != null" >price,</if>
+      <if test="manuName != null" >manuName,</if>
+      <if test="barCode != null" >barCode,</if>
+      <if test="sku != null" >sku,</if>
+      <if test="description != null" >description,</if>
+      <if test="note != null" >note,</if>
+      <if test="quantity != null" >quantity,</if>
+      <if test="pic != null" >pic,</if>
+      <if test="stockArea != null" >stockArea,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemID != null" >   #{itemID},  </if>
+      <if test="itemName != null" >   #{itemName},  </if>
+      <if test="typeName != null" >   #{typeName},  </if>
+      <if test="price != null" >   #{price},  </if>
+      <if test="manuName != null" >   #{manuName},  </if>
+      <if test="barCode != null" >   #{barCode},  </if>
+      <if test="sku != null" >   #{sku},  </if>
+      <if test="description != null" >   #{description},  </if>
+      <if test="note != null" >   #{note},  </if>
+      <if test="quantity != null" >   #{quantity},  </if>
+      <if test="pic != null" >   #{pic},  </if>
+      <if test="stockArea != null" >   #{stockArea},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.Product" >
+    update product
+     <set >
+      <if test="itemID != null" >itemID=#{itemID}, </if>
+      <if test="itemName != null" >itemName=#{itemName}, </if>
+      <if test="typeName != null" >typeName=#{typeName}, </if>
+      <if test="price != null" >price=#{price}, </if>
+      <if test="manuName != null" >manuName=#{manuName}, </if>
+      <if test="barCode != null" >barCode=#{barCode}, </if>
+      <if test="sku != null" >sku=#{sku}, </if>
+      <if test="description != null" >description=#{description}, </if>
+      <if test="note != null" >note=#{note}, </if>
+      <if test="quantity != null" >quantity=#{quantity}, </if>
+      <if test="pic != null" >pic=#{pic}, </if>
+      <if test="stockArea != null" >stockArea=#{stockArea}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  product   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       product
+  </select>
+        <update id="addkucun"  >
+    update product  set    quantity = quantity+#{qty}   where itemID = #{itemID}
+  </update>
+  
+  <select id="searlist"  parameterType="com.entity.Product"  resultMap="BaseResultMap">
+      select * from  product   where 1=1 ${Where} order by id desc
+  </select>
+</mapper>
+

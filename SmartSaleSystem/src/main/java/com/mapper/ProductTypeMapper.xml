@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.ProductTypeDao" >
+  <resultMap id="BaseResultMap" type="com.entity.ProductType" >
+    <id column="id" property="id"   />
+ <result column="typeName" property="typeName" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from productType     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from productType where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.ProductType" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into productType
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeName != null" >typeName,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeName != null" >   #{typeName},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.ProductType" >
+    update productType
+     <set >
+      <if test="typeName != null" >typeName=#{typeName}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  productType   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       productType
+  </select>
+  <select id="searlist"  parameterType="com.entity.ProductType"  resultMap="BaseResultMap">
+      select * from  productType   where 1=1 ${Where} order by id desc
+  </select>
+</mapper>
+

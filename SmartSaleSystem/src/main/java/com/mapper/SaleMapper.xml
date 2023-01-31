@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.SaleDao" >
+  <resultMap id="BaseResultMap" type="com.entity.Sale" >
+    <id column="id" property="id"   />
+ <result column="itemID" property="itemID" />
+ <result column="itemName" property="itemName" />
+ <result column="saleDate" property="saleDate" />
+ <result column="quantity" property="quantity" />
+ <result column="price" property="price" />
+ <result column="operator" property="operator" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from sale     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from sale where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Sale" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into sale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemID != null" >itemID,</if>
+      <if test="itemName != null" >itemName,</if>
+      <if test="saleDate != null" >saleDate,</if>
+      <if test="quantity != null" >quantity,</if>
+      <if test="price != null" >price,</if>
+      <if test="operator != null" >operator,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemID != null" >   #{itemID},  </if>
+      <if test="itemName != null" >   #{itemName},  </if>
+      <if test="saleDate != null" >   #{saleDate},  </if>
+      <if test="quantity != null" >   #{quantity},  </if>
+      <if test="price != null" >   #{price},  </if>
+      <if test="operator != null" >   #{operator},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.Sale" >
+    update sale
+     <set >
+      <if test="itemID != null" >itemID=#{itemID}, </if>
+      <if test="itemName != null" >itemName=#{itemName}, </if>
+      <if test="saleDate != null" >saleDate=#{saleDate}, </if>
+      <if test="quantity != null" >quantity=#{quantity}, </if>
+      <if test="price != null" >price=#{price}, </if>
+      <if test="operator != null" >operator=#{operator}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  sale   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       sale
+  </select>
+  <select id="searlist"  parameterType="com.entity.Sale"  resultMap="BaseResultMap">
+      select * from  sale   where 1=1 ${Where} order by id desc
+  </select>
+</mapper>
+

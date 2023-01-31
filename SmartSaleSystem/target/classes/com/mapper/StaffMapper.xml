@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.StaffDao" >
+  <resultMap id="BaseResultMap" type="com.entity.Staff" >
+    <id column="id" property="id"   />
+ <result column="username" property="username" />
+ <result column="pwd" property="pwd" />
+ <result column="staffName" property="staffName" />
+ <result column="sex" property="sex" />
+ <result column="age" property="age" />
+ <result column="tel" property="tel" />
+ <result column="address" property="address" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from staff     where id = #{id}
+   </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+     delete from staff where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Staff" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+     </selectKey>
+    insert into staff
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >username,</if>
+      <if test="pwd != null" >pwd,</if>
+      <if test="staffName != null" >staffName,</if>
+      <if test="sex != null" >sex,</if>
+      <if test="age != null" >age,</if>
+      <if test="tel != null" >tel,</if>
+      <if test="address != null" >address,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >   #{username},  </if>
+      <if test="pwd != null" >   #{pwd},  </if>
+      <if test="staffName != null" >   #{staffName},  </if>
+      <if test="sex != null" >   #{sex},  </if>
+      <if test="age != null" >   #{age},  </if>
+      <if test="tel != null" >   #{tel},  </if>
+      <if test="address != null" >   #{address},  </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.entity.Staff" >
+    update staff
+     <set >
+      <if test="username != null" >username=#{username}, </if>
+      <if test="pwd != null" >pwd=#{pwd}, </if>
+      <if test="staffName != null" >staffName=#{staffName}, </if>
+      <if test="sex != null" >sex=#{sex}, </if>
+      <if test="age != null" >age=#{age}, </if>
+      <if test="tel != null" >tel=#{tel}, </if>
+      <if test="address != null" >address=#{address}, </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="getList"   resultMap="BaseResultMap">
+      select * from  staff   order by id desc limit #{begin}, ${size}
+  </select>
+  <select id="getTotal" resultType="int">
+    select count(*) from       staff
+  </select>
+  <select id="searlist"  parameterType="com.entity.Staff"  resultMap="BaseResultMap">
+      select * from  staff   where 1=1 ${Where} order by id desc
+  </select>
+  <select id="userlogin" resultMap="BaseResultMap"   >
+   select * from staff      where  username = #{username} and pwd = #{pwd} 
+  </select>
+  <update id="pwd"   parameterType="com.entity.Staff" >
+   update staff   set   pwd = #{pwd}     where username = #{username}
+  </update>
+</mapper>
+
